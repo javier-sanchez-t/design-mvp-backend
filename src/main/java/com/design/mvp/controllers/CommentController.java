@@ -5,20 +5,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.design.mvp.dto.ProjectDTO;
-import com.design.mvp.entities.Project;
-import com.design.mvp.services.ProjectService;
+
+import com.design.mvp.entities.Comment;
+import com.design.mvp.services.CommentService;
 
 @RestController
-@RequestMapping("/projects")
-public class ProjectController {
+@RequestMapping("/comments")
+public class CommentController {
 	
 	@Autowired
-	ProjectService projectService;
-
-    @PostMapping
-    Project newUsuario(@RequestBody ProjectDTO newProject) {
-        return projectService.saveProject(newProject);
-    }
-
+	CommentService commentService;
+	
+	@PostMapping
+	Comment saveComment(@RequestBody Comment newComment) {
+		return commentService.saveComment(newComment);
+	}
+	
 }

@@ -15,28 +15,37 @@ import com.design.mvp.repositories.ProjectRepository;
 import com.design.mvp.repositories.VersionRepository;
 
 @Service
-public class VersionServiceImpl implements VersionService{
-	
+public class VersionServiceImpl implements VersionService {
+
 	@Autowired
 	VersionRepository versionRepository;
-	
+
 	@Autowired
 	ProjectRepository projectRepository;
 
 	@Override
 	public VersionDTO getLatestVersion(String projectName) {
 		Project project = projectRepository.findByName(projectName);
-		if(project==null) {
+		if (project == null) {
 			throw new BusinessLogicException("The project does not exist");
 		}
-		
+
 		Version latestversion = versionRepository.findTop1ByProjectOrderByIdVersionDesc(project);
 		List<Version> versions = versionRepository.findByProject(project);
 		VersionDTO versionDTO = new VersionDTO();
 		versionDTO.setLastVersion(latestversion);
 		versionDTO.setVersions(versions);
-		
+
 		return versionDTO;
+	}
+
+	@Override
+	public boolean approveVersion(Long idVersion, boolean status) {
+		if (versionRepository.approveVersion(status, idVersion) == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

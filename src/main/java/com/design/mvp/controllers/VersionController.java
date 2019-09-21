@@ -3,6 +3,8 @@ package com.design.mvp.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,7 +12,7 @@ import com.design.mvp.dto.VersionDTO;
 import com.design.mvp.services.VersionService;
 
 @RestController
-@RequestMapping("/version")
+@RequestMapping("/versions")
 public class VersionController {
 	
 	@Autowired
@@ -19,6 +21,11 @@ public class VersionController {
 	@GetMapping("/{projectName}")
 	VersionDTO getLatestVersion(@PathVariable  String projectName){
 		return versionService.getLatestVersion(projectName);
+	}
+	
+	@PutMapping("/approve/{idVersion}/{status}")
+	boolean approveVersion(@PathVariable  Long idVersion, @PathVariable boolean status) {
+		return versionService.approveVersion(idVersion, status);
 	}
 	
 }
