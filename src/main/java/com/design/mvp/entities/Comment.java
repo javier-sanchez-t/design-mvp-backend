@@ -39,14 +39,16 @@ public class Comment implements Serializable {
 
 	private String stroke;
 
-	// bi-directional many-to-one association to Comment
-	@ManyToOne
-	@JoinColumn(name = "id_reply_comment")
-	private Comment commentBean;
+	private boolean solved;
+
+	//bi-directional many-to-one association to ReplyComment
+	@OneToMany(mappedBy="commentBean")
+	private List<ReplyComment> replyComments;
 
 	// bi-directional many-to-one association to Comment
-	/*@OneToMany(mappedBy = "commentBean")
-	private List<Comment> comments;*/
+	/*
+	 * @OneToMany(mappedBy = "commentBean") private List<Comment> comments;
+	 */
 
 	// bi-directional many-to-one association to Project
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -87,35 +89,21 @@ public class Comment implements Serializable {
 		this.name = name;
 	}
 
-	public Comment getCommentBean() {
-		return this.commentBean;
-	}
-
-	public void setCommentBean(Comment commentBean) {
-		this.commentBean = commentBean;
-	}
-
-	/*public List<Comment> getComments() {
-		return this.comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public Comment addComment(Comment comment) {
-		getComments().add(comment);
-		comment.setCommentBean(this);
-
-		return comment;
-	}
-
-	public Comment removeComment(Comment comment) {
-		getComments().remove(comment);
-		comment.setCommentBean(null);
-
-		return comment;
-	}*/
+	/*
+	 * public List<Comment> getComments() { return this.comments; }
+	 * 
+	 * public void setComments(List<Comment> comments) { this.comments = comments; }
+	 * 
+	 * public Comment addComment(Comment comment) { getComments().add(comment);
+	 * comment.setCommentBean(this);
+	 * 
+	 * return comment; }
+	 * 
+	 * public Comment removeComment(Comment comment) {
+	 * getComments().remove(comment); comment.setCommentBean(null);
+	 * 
+	 * return comment; }
+	 */
 
 	@JsonIgnore
 	public Project getProject() {
@@ -181,6 +169,22 @@ public class Comment implements Serializable {
 
 	public void setStroke(String stroke) {
 		this.stroke = stroke;
+	}
+
+	public boolean isSolved() {
+		return solved;
+	}
+
+	public void setSolved(boolean solved) {
+		this.solved = solved;
+	}
+	
+	public List<ReplyComment> getReplyComments() {
+		return this.replyComments;
+	}
+
+	public void setReplyComments(List<ReplyComment> replyComments) {
+		this.replyComments = replyComments;
 	}
 
 }

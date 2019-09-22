@@ -24,13 +24,18 @@ public class VersionServiceImpl implements VersionService {
 	ProjectRepository projectRepository;
 
 	@Override
-	public VersionDTO getLatestVersion(String projectName) {
+	public VersionDTO getLatestVersion(String projectName, String version) {
 		Project project = projectRepository.findByName(projectName);
 		if (project == null) {
 			throw new BusinessLogicException("The project does not exist");
 		}
 
-		Version latestversion = versionRepository.findTop1ByProjectOrderByIdVersionDesc(project);
+		Version latestversion = null;
+		if (version.equals("")) {
+			latestversion = versionRepository.findTop1ByProjectOrderByIdVersionDesc(project);
+		} else {
+			latestversion = versionRepository.findByProjectAndVersion(project, version);
+		}
 		List<Version> versions = versionRepository.findByProject(project);
 		VersionDTO versionDTO = new VersionDTO();
 		versionDTO.setLastVersion(latestversion);
@@ -46,6 +51,14 @@ public class VersionServiceImpl implements VersionService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public Version saveVersion(Version newVersion) {
+		int numVersions = versionRepository.numVersionsByProject(newVersion.getProject());
+		String version = "1." + numVersions;
+		newVersion.setVersion(version);
+		return versionRepository.save(newVersion);
 	}
 
 }
